@@ -1,6 +1,6 @@
-import {Multiples} from "./index";
+import {Multiple} from "./index";
 
-export const rodTwo: Array<Multiples> = [
+export const rodTwo: Array<Multiple> = [
   {
     zeroth: 2,
     tens: 0,
