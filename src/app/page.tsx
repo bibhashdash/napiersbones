@@ -1,15 +1,23 @@
 'use client';
-import {useState} from "react";
-import { rodOne } from "../data";
+import {FormEvent, useState} from "react";
+import { rodOne, rodTwo, rodThree } from "../data";
+import {number} from "prop-types";
 
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
 export default function Home() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const handleNumClick = (num: number) => {
-    setIsLoading(true);
-    console.log(num);
-    setIsLoading(false);
+
+  const [firstNumber, setFirstNumber] = useState<number>(0);
+  const [secondNumber, setSecondNumber] = useState<number>(0);
+
+  const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
   }
+
+  const handleSecondSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  }
+
   return (
     <main className="flex flex-col h-screen items-center">
       <div
@@ -20,7 +28,7 @@ export default function Home() {
               numKeypad.filter(item => item > 0)
                 .map(item =>
                   <div
-                    className="p-4 border-2 border-gray-500 rounded-md text-2xl bg-amber-300 text-gray-950 hover:bg-gray-700 hover:text-gray-50 flex justify-center"
+                    className="px-4 h-[60px] border-2 border-gray-500 rounded-md text-2xl bg-amber-300 text-gray-950 hover:bg-gray-700 hover:text-gray-50 flex justify-center items-center"
                     key={item}
                   >
                     {item}
@@ -29,40 +37,25 @@ export default function Home() {
             }
           </div>
           <div className="col-span-11 border-2 border-gray-100 rounded-md flex gap-2">
-            <div className="flex flex-col gap-2">
-              {
-                rodOne.map((item, index) => (
-                  <div className="px-4 border-2 border-gray-500 rounded-md text-2xl" key={index}>
-                    {
-                      index > 0 && <div>{item.zeroth}</div>
-                    }
-                    <div>{item.tens}</div>
-                  </div>
-                ))
-              }
-            </div>
+
           </div>
         </div>
-        <div className="w-full max-w-[320px] flex flex-wrap gap-2">
-          {
-            numKeypad.map(item => (
-              <button
-                onClick={() => handleNumClick(item)}
-                key={item}
-                disabled={isLoading}
-                className="p-4 border-2 border-gray-500 rounded-md text-2xl hover:bg-gray-700 hover:text-gray-50 disabled:bg-gray-300"
-              >
-                {item}
-              </button>
-            ))
-          }
+        <div className="flex gap-4 items-center">
+          <form onSubmit={e => handleFirstSubmit(e)} className="flex flex-col items-center gap-2">
+            <label>First number</label>
+            <input onChange={e => setFirstNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
+            <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
+          </form>
+          <div>
+            ❌
+          </div>
+          <form onSubmit={e => handleSecondSubmit(e)} className="flex flex-col items-center gap-2">
+            <label>Second number</label>
+            <input onChange={e => setSecondNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
+            <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
+          </form>
         </div>
-        {/*<div className="flex gap-2">*/}
-        {/*  <button className="px-4 py-2 rounded-md bg-gray-700 text-gray-50 hover:bg-gray-900">Multiply</button>*/}
-        {/*  <button className="px-4 py-2 rounded-md bg-gray-700 text-gray-50 disabled:bg-gray-300 cursor-not-allowed"*/}
-        {/*          disabled={true}>Divide*/}
-        {/*  </button>*/}
-        {/*</div>*/}
+
       </div>
     </main>
   );

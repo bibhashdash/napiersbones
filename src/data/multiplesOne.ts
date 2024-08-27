@@ -1,40 +1,40 @@
-import {multiples} from "./index";
+import {Multiples} from "./index";
 
-export const rodOne: Array<multiples> = [
+export const rodOne: Array<Multiples> = [
   {
-    zeroth: 0,
-    tens: 1,
+    zeroth: 1,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 2,
+    zeroth: 2,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 3,
+    zeroth: 3,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 4,
+    zeroth: 4,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 5,
+    zeroth: 5,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 6,
+    zeroth: 6,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 7,
+    zeroth: 7,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 8,
+    zeroth: 8,
+    tens: 0,
   },
   {
-    zeroth: 0,
-    tens: 9,
+    zeroth: 9,
+    tens: 0,
   },
 ]
