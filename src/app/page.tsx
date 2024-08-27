@@ -1,6 +1,6 @@
 'use client';
 import {FormEvent, useState} from "react";
-import {rodOne, rodTwo, rodThree, Rods, Multiple, RodsDict} from "../data";
+import {allMultiples, Multiple} from "../data";
 import {Rod} from "../components/Rod";
 
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -10,19 +10,15 @@ export default function Home() {
 
   const [firstNumber, setFirstNumber] = useState<number>(0);
   const [secondNumber, setSecondNumber] = useState<number>(0);
-  const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([])
-  const allMultiples: RodsDict = {
-    1: rodOne,
-    2: rodTwo,
-    3: rodThree,
-  }
+  const [multiplicand, setMultiplicand] = useState<number>(0);
+  const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
+
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const tempArray = firstNumber.toString().trim().split('');
     for (let i = 0; i< tempArray.length; i++) {
       for (const [key, value] of Object.entries(allMultiples)) {
         if (key === tempArray[i]) {
-          console.log(value);
           setListOfRods(prevState => [...prevState, value]);
         }
       }
@@ -31,6 +27,17 @@ export default function Home() {
 
   const handleSecondSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setMultiplicand(secondNumber);
+  }
+
+  const handleFirstNumberReset = () => {
+    setListOfRods([]);
+    setFirstNumber(0);
+  }
+
+  const handleSecondNumberReset = () => {
+    setMultiplicand(0);
+    setSecondNumber(0);
   }
 
   return (
@@ -43,7 +50,7 @@ export default function Home() {
               numKeypad
                 .map(item =>
                   <div
-                    className="px-4 h-[60px] border-2 border-gray-500 rounded-md text-2xl bg-amber-300 text-gray-950 hover:bg-gray-700 hover:text-gray-50 flex justify-center items-center"
+                    className={`px-4 h-[60px] border-2 border-gray-500 rounded-md text-2xl bg-amber-300 text-gray-950 hover:bg-gray-700 hover:text-gray-50 flex justify-center items-center ${multiplicand === item && 'bg-red-500'}`}
                     key={item}
                   >
                     {item}
@@ -64,19 +71,47 @@ export default function Home() {
         <div className="flex gap-4 items-center">
           <form onSubmit={e => handleFirstSubmit(e)} className="flex flex-col items-center gap-2">
             <label>First number</label>
-            <input onChange={e => setFirstNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
-            <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
+            {
+              listOfRods.length === 0 ?
+                <>
+                  <input onChange={e => setFirstNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
+                  <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
+                </>
+                :
+                <>
+                  <p className="text-2xl">{firstNumber}</p>
+                  <button onClick={handleFirstNumberReset} className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Reset</button>
+                </>
+            }
+
           </form>
           <div>
             ❌
           </div>
           <form onSubmit={e => handleSecondSubmit(e)} className="flex flex-col items-center gap-2">
             <label>Second number</label>
-            <input onChange={e => setSecondNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
-            <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
+            {
+              multiplicand === 0 ?
+                <>
+                  <input onChange={e => setSecondNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
+                  <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
+                </>
+                :
+                <>
+                  <>
+                    <p className="text-2xl">{secondNumber}</p>
+                    <button onClick={handleSecondNumberReset} className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Reset</button>
+                  </>
+                </>
+            }
           </form>
         </div>
-
+        <button
+          disabled={listOfRods.length <= 0 || multiplicand <= 0}
+          className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-400"
+        >
+          Calculate Result
+        </button>
       </div>
     </main>
   );
