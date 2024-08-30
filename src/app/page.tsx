@@ -34,11 +34,13 @@ export default function Home() {
   const handleFirstNumberReset = () => {
     setListOfRods([]);
     setFirstNumber(0);
+    setResult(["0"]);
   }
 
   const handleSecondNumberReset = () => {
     setMultiplicand(0);
     setSecondNumber(0);
+    setResult(["0"]);
   }
 
   const handleResultCalculation = () => {
