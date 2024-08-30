@@ -2,6 +2,7 @@
 import {FormEvent, useState} from "react";
 import {allMultiples, Multiple} from "../data";
 import {Rod} from "../components/Rod";
+import {MultiplyIcon} from "../components/MultiplyIcon";
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
@@ -11,7 +12,7 @@ export default function Home() {
   const [secondNumber, setSecondNumber] = useState<number>(0);
   const [multiplicand, setMultiplicand] = useState<number>(0);
   const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
-  const [result, setResult] = useState<Array<string>>([]);
+  const [result, setResult] = useState<Array<string>>(["0"]);
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,13 +85,8 @@ export default function Home() {
           </div>
         </div>
 
-          {
-            firstNumber && multiplicand && result.length > 0 && (
-              <p className="text-4xl text-red-600 w-fit">{result.join('')}</p>
-            )
-          }
-
-        <div className="flex gap-4 items-center">
+        <p className="text-4xl text-red-500 w-fit">Result: {result.join('')}</p>
+        <div className="number-input-section">
           <form onSubmit={e => handleFirstSubmit(e)} className="flex flex-col items-center gap-2">
             <label>First number</label>
             {
@@ -107,8 +103,8 @@ export default function Home() {
             }
 
           </form>
-          <div>
-            ❌
+          <div className="flex justify-center text-5xl">
+            <MultiplyIcon size={36} colour="#000000" />
           </div>
           <form onSubmit={e => handleSecondSubmit(e)} className="flex flex-col items-center gap-2">
             <label>Second number</label>
@@ -131,7 +127,7 @@ export default function Home() {
         <button
           onClick={handleResultCalculation}
           disabled={listOfRods.length <= 0 || multiplicand <= 0}
-          className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-400"
+          className="bg-red-500 text-gray-50 px-4 py-2 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-400"
         >
           Calculate Result
         </button>
