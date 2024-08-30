@@ -2,7 +2,6 @@
 import {FormEvent, useState} from "react";
 import {allMultiples, Multiple} from "../data";
 import {Rod} from "../components/Rod";
-
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
@@ -12,6 +11,7 @@ export default function Home() {
   const [secondNumber, setSecondNumber] = useState<number>(0);
   const [multiplicand, setMultiplicand] = useState<number>(0);
   const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
+  const [result, setResult] = useState<Array<string>>([]);
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,6 +38,21 @@ export default function Home() {
   const handleSecondNumberReset = () => {
     setMultiplicand(0);
     setSecondNumber(0);
+  }
+
+  const handleResultCalculation = () => {
+    let finalArray: Array<string> = [];
+    const rodsArrayLength = listOfRods.length;
+    const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth
+    finalArray.unshift(singleValue.toString());
+    for(let i = listOfRods.length - 2; i >= 0 ; i--) {
+      const sum = listOfRods[i+1][multiplicand-1].tens + listOfRods[i][multiplicand-1].zeroth;
+      finalArray.unshift(sum.toString());
+    }
+    if (finalArray[0] === '0') {
+      finalArray.shift()
+    }
+    setResult(finalArray);
   }
 
   return (
@@ -68,6 +83,13 @@ export default function Home() {
             }
           </div>
         </div>
+
+          {
+            firstNumber && multiplicand && result.length > 0 && (
+              <p className="text-4xl text-red-600 w-fit">{result.join('')}</p>
+            )
+          }
+
         <div className="flex gap-4 items-center">
           <form onSubmit={e => handleFirstSubmit(e)} className="flex flex-col items-center gap-2">
             <label>First number</label>
@@ -107,6 +129,7 @@ export default function Home() {
           </form>
         </div>
         <button
+          onClick={handleResultCalculation}
           disabled={listOfRods.length <= 0 || multiplicand <= 0}
           className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-gray-400"
         >
