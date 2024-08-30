@@ -1,8 +1,9 @@
 'use client';
 import {FormEvent, useState} from "react";
-import {allMultiples, Multiple} from "../data";
+import {Multiple} from "../data";
 import {Rod} from "../components/Rod";
 import {MultiplyIcon} from "../components/MultiplyIcon";
+import {generateRodNumbers} from "../utilities/generateRodNumbers";
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
@@ -16,12 +17,10 @@ export default function Home() {
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const tempArray = firstNumber.toString().trim().split('');
-    for (let i = 0; i< tempArray.length; i++) {
-      for (const [key, value] of Object.entries(allMultiples)) {
-        if (key === tempArray[i]) {
-          setListOfRods(prevState => [...prevState, value]);
-        }
+    if (firstNumber > 0) {
+      const tempArray = firstNumber.toString().trim().split('');
+      for (let i = 0; i< tempArray.length; i++) {
+        setListOfRods(prevState => [...prevState, generateRodNumbers(Number(tempArray[i]))]);
       }
     }
   }
@@ -78,7 +77,7 @@ export default function Home() {
           </div>
           <div className="col-span-11 border-2 border-gray-100 rounded-md flex gap-2">
             {
-              listOfRods.map((item, index) => (
+             listOfRods.length > 0 && listOfRods.map((item, index) => (
                 <div key={index} className="flex flex-col gap-2">
                   <Rod rod={item} />
                 </div>
@@ -94,13 +93,18 @@ export default function Home() {
             {
               listOfRods.length === 0 ?
                 <>
-                  <input onChange={e => setFirstNumber(e.target.valueAsNumber)} type="number" className="rounded-md border-2 border-gray-500 text-2xl"/>
+                  <input
+                    onChange={e => setFirstNumber(e.target.valueAsNumber)}
+                    type="number"
+                    className="rounded-md border-2 border-gray-500 text-2xl"/>
                   <button className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Submit</button>
                 </>
                 :
                 <>
                   <p className="text-2xl">{firstNumber}</p>
-                  <button onClick={handleFirstNumberReset} className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Reset</button>
+                  <button
+                    onClick={handleFirstNumberReset}
+                    className="bg-gray-950 text-gray-50 px-4 py-2 rounded-md">Reset</button>
                 </>
             }
 
