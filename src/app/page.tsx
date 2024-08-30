@@ -47,12 +47,19 @@ export default function Home() {
     const rodsArrayLength = listOfRods.length;
     const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth
     finalArray.unshift(singleValue.toString());
+    let carryOver = 0;
     for(let i = listOfRods.length - 2; i >= 0 ; i--) {
-      const sum = listOfRods[i+1][multiplicand-1].tens + listOfRods[i][multiplicand-1].zeroth;
-      finalArray.unshift(sum.toString());
-    }
-    if (finalArray[0] === '0') {
-      finalArray.shift()
+      const sum = listOfRods[i+1][multiplicand-1].tens + listOfRods[i][multiplicand-1].zeroth + carryOver;
+      if (sum < 10) {
+        finalArray.unshift(sum.toString());
+        carryOver = 0;
+      } else {
+        finalArray.unshift(sum.toString().split('')[1]);
+        carryOver = Number(sum.toString().split('')[0]);
+      }
+      if (i === 0) {
+        finalArray.unshift((listOfRods[i][multiplicand - 1].tens + carryOver).toString());
+      }
     }
     setResult(finalArray);
   }
