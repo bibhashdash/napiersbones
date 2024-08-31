@@ -4,8 +4,14 @@ import {rodThree} from "./multiplesThree";
 import {rodFour} from "./multiplesFour";
 
 export interface Multiple {
-  zeroth: number,
-  tens: number,
+  zeroth: {
+    value: number,
+    isLit: boolean
+  },
+  tens: {
+    value: number,
+    isLit: boolean
+  },
 }
 
 export interface Rods {

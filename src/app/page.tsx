@@ -14,6 +14,7 @@ export default function Home() {
   const [multiplicand, setMultiplicand] = useState<number>(0);
   const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
   const [result, setResult] = useState<Array<string>>(["0"]);
+  // const [] = useState<Array<>>()
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,11 +46,11 @@ export default function Home() {
   const handleResultCalculation = () => {
     let finalArray: Array<string> = [];
     const rodsArrayLength = listOfRods.length;
-    const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth
+    const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth.value
     finalArray.unshift(singleValue.toString());
     let carryOver = 0;
     for(let i = listOfRods.length - 2; i >= 0 ; i--) {
-      const sum = listOfRods[i+1][multiplicand-1].tens + listOfRods[i][multiplicand-1].zeroth + carryOver;
+      const sum = listOfRods[i+1][multiplicand-1].tens.value + listOfRods[i][multiplicand-1].zeroth.value + carryOver;
       if (sum < 10) {
         finalArray.unshift(sum.toString());
         carryOver = 0;
@@ -58,8 +59,11 @@ export default function Home() {
         carryOver = Number(sum.toString().split('')[0]);
       }
       if (i === 0) {
-        finalArray.unshift((listOfRods[i][multiplicand - 1].tens + carryOver).toString());
+        finalArray.unshift((listOfRods[i][multiplicand - 1].tens.value + carryOver).toString());
       }
+    }
+    if (finalArray[0] === '0') {
+      finalArray.shift();
     }
     setResult(finalArray);
   }
