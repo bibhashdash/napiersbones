@@ -14,7 +14,6 @@ export default function Home() {
   const [multiplicand, setMultiplicand] = useState<number>(0);
   const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
   const [result, setResult] = useState<Array<string>>(["0"]);
-  // const [] = useState<Array<>>()
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,7 +77,7 @@ export default function Home() {
               numKeypad
                 .map(item =>
                   <div
-                    className={`px-4 h-[60px] border-2 border-gray-500 rounded-md text-2xl bg-amber-300 text-gray-950 hover:bg-gray-700 hover:text-gray-50 flex justify-center items-center ${multiplicand === item && 'bg-red-500'}`}
+                    className={`px-4 h-[60px] border-2 border-gray-500 rounded-md text-2xl bg-amber-300 hover:bg-gray-700 hover:text-gray-50 flex justify-center items-center ${multiplicand === item ? 'bg-red-500 text-gray-50' : 'text-gray-950'}`}
                     key={item}
                   >
                     {item}
@@ -87,14 +86,14 @@ export default function Home() {
             }
           </div>
           <div className="col-span-11 border-2 border-gray-100 rounded-md flex gap-2">
-            {
-             listOfRods.length > 0 && listOfRods.map((item, index) => (
-                <div key={index} className="flex flex-col gap-2">
-                  <Rod rod={item} />
-                </div>
-              ))
-            }
-          </div>
+              {
+                listOfRods.length > 0 && listOfRods.map((item, index) => (
+                  <div key={index} className="flex flex-col gap-2">
+                    <Rod litIndex={multiplicand} rod={item} />
+                  </div>
+                ))
+              }
+            </div>
         </div>
 
         <p className="text-4xl text-red-500 w-fit">Result: {result.join('')}</p>
