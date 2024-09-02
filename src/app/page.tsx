@@ -6,7 +6,11 @@ import {MultiplyIcon} from "../components/MultiplyIcon";
 import {generateRodNumbers} from "../utilities/generateRodNumbers";
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-
+export interface BounceIndex {
+  index: number,
+  zeroth: boolean,
+  tens: boolean,
+}
 export default function Home() {
 
   const [firstNumber, setFirstNumber] = useState<number>(0);
@@ -14,6 +18,11 @@ export default function Home() {
   const [multiplicand, setMultiplicand] = useState<number>(0);
   const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
   const [result, setResult] = useState<Array<string>>(["0"]);
+  const [bounceIndex, setBounceIndex] = useState<BounceIndex>({
+    zeroth: false,
+    tens: false,
+    index: 0,
+  })
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,10 +54,20 @@ export default function Home() {
   const handleResultCalculation = () => {
     let finalArray: Array<string> = [];
     const rodsArrayLength = listOfRods.length;
-    const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth.value
+    const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth.value;
+    setBounceIndex({
+      index: rodsArrayLength - 1,
+      tens: false,
+      zeroth: true,
+    })
     finalArray.unshift(singleValue.toString());
     let carryOver = 0;
     for(let i = listOfRods.length - 2; i >= 0 ; i--) {
+      // setBounceIndex({
+      //   index: i,
+      //   tens: false,
+      //   zeroth: true,
+      // })
       const sum = listOfRods[i+1][multiplicand-1].tens.value + listOfRods[i][multiplicand-1].zeroth.value + carryOver;
       if (sum < 10) {
         finalArray.unshift(sum.toString());
@@ -89,7 +108,12 @@ export default function Home() {
               {
                 listOfRods.length > 0 && listOfRods.map((item, index) => (
                   <div key={index} className="flex flex-col gap-2">
-                    <Rod litIndex={multiplicand} rod={item} />
+                    <Rod
+                      rodIndex={index}
+                      bounceIndex={bounceIndex}
+                      litIndex={multiplicand}
+                      rod={item}
+                    />
                   </div>
                 ))
               }
