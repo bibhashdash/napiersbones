@@ -6,10 +6,18 @@ import {MultiplyIcon} from "../components/MultiplyIcon";
 import {generateRodNumbers} from "../utilities/generateRodNumbers";
 const numKeypad: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+export interface LitBooleans {
+  zerothLit: boolean,
+  tensLit: boolean,
+}
 export interface BounceIndex {
-  index: number,
-  zeroth: boolean,
-  tens: boolean,
+  value: number | null,
+  litConditionals: LitBooleans
+}
+
+export interface BounceIndices {
+  indexOne: BounceIndex | null,
+  indexTwo: BounceIndex | null,
 }
 export default function Home() {
 
@@ -18,10 +26,21 @@ export default function Home() {
   const [multiplicand, setMultiplicand] = useState<number>(0);
   const [listOfRods, setListOfRods] = useState<Array<Array<Multiple>>>([]);
   const [result, setResult] = useState<Array<string>>(["0"]);
-  const [bounceIndex, setBounceIndex] = useState<BounceIndex>({
-    zeroth: false,
-    tens: false,
-    index: 0,
+  const [bounceIndices, setBounceIndices] = useState<BounceIndices>({
+    indexOne: {
+      value: null,
+      litConditionals: {
+        tensLit: false,
+        zerothLit: false,
+      }
+    },
+    indexTwo: {
+      value: null,
+      litConditionals: {
+        tensLit: false,
+        zerothLit: false,
+      }
+    }
   })
 
   const handleFirstSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -55,19 +74,37 @@ export default function Home() {
     let finalArray: Array<string> = [];
     const rodsArrayLength = listOfRods.length;
     const singleValue = listOfRods[rodsArrayLength - 1][multiplicand - 1].zeroth.value;
-    setBounceIndex({
-      index: rodsArrayLength - 1,
-      tens: false,
-      zeroth: true,
+    setBounceIndices({
+      indexOne: {
+        value: rodsArrayLength - 1,
+        litConditionals: {
+          zerothLit: true,
+          tensLit: false,
+        }
+      },
+      indexTwo: null,
     })
     finalArray.unshift(singleValue.toString());
     let carryOver = 0;
     for(let i = listOfRods.length - 2; i >= 0 ; i--) {
-      // setBounceIndex({
-      //   index: i,
-      //   tens: false,
-      //   zeroth: true,
-      // })
+      setTimeout(() => {
+        setBounceIndices({
+          indexOne: {
+            value: i,
+            litConditionals: {
+              tensLit: true,
+              zerothLit: false,
+            }
+          },
+          indexTwo: {
+            value: i - 1,
+            litConditionals: {
+              tensLit: false,
+              zerothLit: true,
+            }
+          }
+        })
+      }, 1000)
       const sum = listOfRods[i+1][multiplicand-1].tens.value + listOfRods[i][multiplicand-1].zeroth.value + carryOver;
       if (sum < 10) {
         finalArray.unshift(sum.toString());
@@ -110,7 +147,7 @@ export default function Home() {
                   <div key={index} className="flex flex-col gap-2">
                     <Rod
                       rodIndex={index}
-                      bounceIndex={bounceIndex}
+                      bounceIndices={bounceIndices}
                       litIndex={multiplicand}
                       rod={item}
                     />
